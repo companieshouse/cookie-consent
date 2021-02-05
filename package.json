@@ -1,0 +1,36 @@
+{
+  "name": "frontend-typescript-template",
+  "version": "1.0.0",
+  "description": "A template repo for producing ES5 compatible JS from Typescript",
+  "main": "index.ts",
+  "repository": {
+    "url": "https://github.com/companieshouse/frontend-typescript-template"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js --mode production",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "lint": "ts-standard",
+    "lint:fix": "ts-standard --fix"
+  },
+  "author": "Michael Smith <msmith1@companieshouse.gov.uk>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.2.0",
+    "chai": "^4.3.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "mocha": "^8.2.1",
+    "ts-loader": "^8.0.15",
+    "ts-node": "^9.1.1",
+    "ts-standard": "^10.0.0",
+    "typescript": "^4.1.3",
+    "webpack": "^5.20.2",
+    "webpack-cli": "^4.5.0"
+  },
+  "ts-standard": {
+    "ignore": [
+      "dist",
+      "node_modules"
+    ]
+  }
+}
