@@ -1,5 +1,13 @@
-// Replace the contents of this file with your own code and delete the examples folder
+import { checkCookieIsSet } from './utilities'
 
-import { exampleFunction } from './examples'
+if (checkCookieIsSet() === 'yes') {
+  const cookieBanner = document.getElementById('cookie-banner')
+  if (cookieBanner?.style.display === 'none') {
+    cookieBanner.style.display = 'block'
+  } else if (cookieBanner != null) {
+    cookieBanner.style.display = 'none'
+  }
+}
 
-console.log(exampleFunction())
+export { acceptCookies } from './utilities'
+export { rejectCookies } from './utilities'

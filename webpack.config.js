@@ -20,6 +20,7 @@ module.exports = {
     extensions: ['.ts', '.js']
   },
   output: {
+    library: 'CookieConsent',
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   }

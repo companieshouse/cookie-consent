@@ -1,10 +1,10 @@
 {
-  "name": "frontend-typescript-template",
+  "name": "cookie-consent",
   "version": "1.0.0",
   "description": "A template repo for producing ES5 compatible JS from Typescript",
   "main": "index.ts",
   "repository": {
-    "url": "https://github.com/companieshouse/frontend-typescript-template"
+    "url": "https://github.com/companieshouse/cookie-consent"
   },
   "scripts": {
     "build": "webpack --config webpack.config.js --mode production",
@@ -17,9 +17,13 @@
   "devDependencies": {
     "@types/chai": "^4.2.14",
     "@types/mocha": "^8.2.0",
+    "@types/sinon": "^9.0.10",
+    "@types/sinon-chai": "^3.2.5",
     "chai": "^4.3.0",
     "clean-webpack-plugin": "^3.0.0",
     "mocha": "^8.2.1",
+    "sinon": "^9.2.4",
+    "sinon-chai": "^3.5.0",
     "ts-loader": "^8.0.15",
     "ts-node": "^9.1.1",
     "ts-standard": "^10.0.0",
