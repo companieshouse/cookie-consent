@@ -14,7 +14,7 @@ export function acceptCookies (): void {
   const cookieBanner = document.getElementById('cookie-banner')
   startPiwik()
   createCookie('allow_cookies', 'yes', 1)
-  if (cookieBanner?.style.display === 'block') {
+  if (cookieBanner?.style.display != null && cookieBanner?.style.display != 'none') {
     cookieBanner.style.display = 'none'
   }
 }
@@ -22,8 +22,8 @@ export function acceptCookies (): void {
 export function rejectCookies (): void {
   const cookieBanner = document.getElementById('cookie-banner')
   createCookie('allow_cookies', 'no', 1)
-  if (cookieBanner?.style.display === 'none') {
-    cookieBanner.style.display = 'block'
+  if (cookieBanner?.style.display != null && cookieBanner?.style.display != 'none') {
+    cookieBanner.style.display = 'none'
   }
 }
 
@@ -31,8 +31,8 @@ export function checkCookieIsSet (): string {
   const nameEQ = 'allow_cookies='
   var cookieArray = document.cookie.split(';')
   for (const cookie of cookieArray) {
-    if (cookie.indexOf(nameEQ) === 0) {
-      return cookie.substring(nameEQ.length, cookie.length)
+    if (cookie.includes(nameEQ)) {
+      return "yes"
     }
   }
   return ''
