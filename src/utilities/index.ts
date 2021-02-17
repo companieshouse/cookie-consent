@@ -12,18 +12,22 @@ function createCookie (name: string, value: string, days: number): void {
 
 export function acceptCookies (): void {
   const cookieBanner = document.getElementById('cookie-banner')
+  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
   startPiwik()
-  createCookie('allow_cookies', 'yes', 1)
-  if (cookieBanner?.style.display != null && cookieBanner?.style.display != 'none') {
-    cookieBanner.style.display = 'none'
+  createCookie('allow_cookies', 'yes,[piwik,google]', 365)
+  if (cookieBanner !== null && cookieBannerAlert !== null) {
+    cookieBanner.hidden = true
+    cookieBannerAlert.removeAttribute("hidden")
   }
 }
 
 export function rejectCookies (): void {
   const cookieBanner = document.getElementById('cookie-banner')
-  createCookie('allow_cookies', 'no', 1)
-  if (cookieBanner?.style.display != null && cookieBanner?.style.display != 'none') {
-    cookieBanner.style.display = 'none'
+  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
+  createCookie('allow_cookies', 'no', 365)
+  if (cookieBanner !== null && cookieBannerAlert !== null) {
+    cookieBanner.hidden = true
+    cookieBannerAlert.removeAttribute("hidden")
   }
 }
 
@@ -37,3 +41,9 @@ export function checkCookieIsSet (): string {
   }
   return ''
 }
+
+export function hideBannerAlert(): void {
+  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
+  cookieBannerAlert!.hidden = true
+}
+
