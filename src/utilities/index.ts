@@ -10,10 +10,10 @@ function createCookie (name: string, value: string, days: number): void {
   document.cookie = name + '=' + value + expires + '; path=/; domain=' + DOMAIN
 }
 
-export function acceptCookies (): void {
+export function acceptCookies (callback: () => void): void {
   const cookieBanner = document.getElementById('cookie-banner')
   const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
-  startPiwik()
+  callback()
   createCookie('allow_cookies', 'yes,[piwik,google]', 365)
   if (cookieBanner !== null && cookieBannerAlert !== null) {
     cookieBanner.hidden = true
