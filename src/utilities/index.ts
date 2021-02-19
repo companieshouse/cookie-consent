@@ -10,20 +10,24 @@ function createCookie (name: string, value: string, days: number): void {
   document.cookie = name + '=' + value + expires + '; path=/; domain=' + DOMAIN
 }
 
-export function acceptCookies (): void {
+export function acceptCookies (callback: () => void): void {
   const cookieBanner = document.getElementById('cookie-banner')
-  startPiwik()
-  createCookie('allow_cookies', 'yes', 1)
-  if (cookieBanner?.style.display === 'block') {
-    cookieBanner.style.display = 'none'
+  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
+  callback()
+  createCookie('allow_cookies', 'yes,[piwik,google]', 365)
+  if (cookieBanner !== null && cookieBannerAlert !== null) {
+    cookieBanner.hidden = true
+    cookieBannerAlert.removeAttribute("hidden")
   }
 }
 
 export function rejectCookies (): void {
   const cookieBanner = document.getElementById('cookie-banner')
-  createCookie('allow_cookies', 'no', 1)
-  if (cookieBanner?.style.display === 'none') {
-    cookieBanner.style.display = 'block'
+  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
+  createCookie('allow_cookies', 'no', 365)
+  if (cookieBanner !== null && cookieBannerAlert !== null) {
+    cookieBanner.hidden = true
+    cookieBannerAlert.removeAttribute("hidden")
   }
 }
 
@@ -31,9 +35,15 @@ export function checkCookieIsSet (): string {
   const nameEQ = 'allow_cookies='
   var cookieArray = document.cookie.split(';')
   for (const cookie of cookieArray) {
-    if (cookie.indexOf(nameEQ) === 0) {
-      return cookie.substring(nameEQ.length, cookie.length)
+    if (cookie.includes(nameEQ)) {
+      return "yes"
     }
   }
   return ''
 }
+
+export function hideBannerAlert(): void {
+  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
+  cookieBannerAlert!.hidden = true
+}
+
