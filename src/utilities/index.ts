@@ -17,7 +17,7 @@ export function acceptCookies (callback: () => void): void {
   createCookie('allow_cookies', 'yes,[piwik,google]', 365)
   if (cookieBanner !== null && cookieBannerAlert !== null) {
     cookieBanner.hidden = true
-    cookieBannerAlert.removeAttribute("hidden")
+    cookieBannerAlert.removeAttribute('hidden')
   }
 }
 
@@ -27,7 +27,7 @@ export function rejectCookies (): void {
   createCookie('allow_cookies', 'no', 365)
   if (cookieBanner !== null && cookieBannerAlert !== null) {
     cookieBanner.hidden = true
-    cookieBannerAlert.removeAttribute("hidden")
+    cookieBannerAlert.removeAttribute('hidden')
   }
 }
 
@@ -36,14 +36,25 @@ export function checkCookieIsSet (): string {
   var cookieArray = document.cookie.split(';')
   for (const cookie of cookieArray) {
     if (cookie.includes(nameEQ)) {
-      return "yes"
+      return 'yes'
     }
   }
   return ''
 }
 
-export function hideBannerAlert(): void {
+export function hideBannerAlert (): void {
   const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
-  cookieBannerAlert!.hidden = true
+  if (cookieBannerAlert !== null) {
+    cookieBannerAlert.hidden = true
+  }
 }
 
+export function start (callback: () => void): void {
+  if (checkCookieIsSet() === 'yes') {
+    callback()
+    const cookieBanner = document.getElementById('cookie-banner')
+    if (cookieBanner !== null) {
+      cookieBanner.hidden = true
+    }
+  }
+}
