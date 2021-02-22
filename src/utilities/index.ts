@@ -77,7 +77,7 @@ export function hideBannerAlert (): void {
 
 /**
  * Start function which is called from the page, accepts a callback to initiate the analytics payload(s)
- * @param callback - () => void)
+ * @param callback () => void
  */
 export function start (callback: () => void): void {
   const { userHasAllowedCookies, cookiesAllowed } = getCookieObject()
@@ -112,7 +112,7 @@ function setDomain (): string {
  * @param cookieArray string[]
  */
 function haveAllCookiesBeenAccepted (cookieArray: string[]): boolean {
-  if (cookieArray.filter(x => !COOKIES.includes(x)).length === 0) {
+  if (COOKIES.filter(x => !cookieArray.includes(x)).length === 0) {
     return true
   }
   return false
