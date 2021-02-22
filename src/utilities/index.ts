@@ -1,4 +1,4 @@
-import { COOKIES, URLS } from '../constants'
+import { COOKIES, COOKIE_NAME, URLS } from '../constants'
 import { CHCookie } from '../types'
 
 /**
@@ -7,11 +7,10 @@ import { CHCookie } from '../types'
  */
 function createCookie (value: CHCookie): void {
   const days = 365
-  const name = 'ch_cookie_consent'
   const date = new Date()
   date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
   const expiryDate = date.toUTCString()
-  document.cookie = name + '=' + JSON.stringify(value) + '; expires=' + expiryDate + '; path=/; domain=' + setDomain()
+  document.cookie = COOKIE_NAME + JSON.stringify(value) + '; expires=' + expiryDate + '; path=/; domain=' + setDomain()
 }
 
 /**
@@ -60,11 +59,10 @@ export function rejectCookies (): void {
  * Returns a cookie object if one exists, otherwise returns a default object
  */
 export function getCookieObject (): CHCookie {
-  const nameEQ = 'ch_cookie_consent='
   var cookieArray = document.cookie.split(';')
 
   for (const cookie of cookieArray) {
-    if (cookie.includes(nameEQ)) {
+    if (cookie.includes(COOKIE_NAME)) {
       const cookieTuple = cookie.split('=')
       return JSON.parse(cookieTuple[1]) as CHCookie
     }
