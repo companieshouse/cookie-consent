@@ -3,26 +3,33 @@ import { CHCookie } from '../types'
 
 /**
  * Creates the Companies House cookie tracking cookie
- * @param name string
- * @param value string
- * @param days number
+ * @param value
  */
-function createCookie (name: string, value: string, days: number): void {
+function createCookie (value: CHCookie): void {
+  const days = 365
+  const name = 'ch_cookie_consent'
   const date = new Date()
   date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
-  const expires = `; expires=${date.toUTCString()}`
-  document.cookie = name + '=' + value + expires + '; path=/; domain=' + setDomain()
+  const expiryDate = date.toUTCString()
+  document.cookie = name + '=' + JSON.stringify(value) + '; expires=' + expiryDate + '; path=/; domain=' + setDomain()
 }
 
 /**
  * Handles the logic when Cookies are accepted
- * @param callback () => void
+ * @param callback
  */
 export function acceptCookies (callback: () => void): void {
+  callback()
   const cookieBanner = document.getElementById('cookie-banner')
   const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
-  callback()
-  createCookie('ch_cookie_consent', `{"userHasAllowedCookies": "yes", "cookiesAllowed": ${JSON.stringify(COOKIES)}}`, 365)
+
+  const cookie: CHCookie = {
+    userHasAllowedCookies: 'yes',
+    cookiesAllowed: COOKIES
+  }
+
+  createCookie(cookie)
+
   if (cookieBanner !== null && cookieBannerAlert !== null) {
     cookieBanner.hidden = true
     cookieBannerAlert.removeAttribute('hidden')
@@ -36,7 +43,12 @@ export function rejectCookies (): void {
   const cookieBanner = document.getElementById('cookie-banner')
   const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
 
-  createCookie('ch_cookie_consent', '{"userHasAllowedCookies": "no", "cookiesAllowed": []}', 365)
+  const cookie: CHCookie = {
+    userHasAllowedCookies: 'no',
+    cookiesAllowed: []
+  }
+
+  createCookie(cookie)
 
   if (cookieBanner !== null && cookieBannerAlert !== null) {
     cookieBanner.hidden = true
@@ -58,10 +70,12 @@ export function getCookieObject (): CHCookie {
     }
   }
 
-  return {
+  const cookie: CHCookie = {
     userHasAllowedCookies: 'unset',
     cookiesAllowed: []
   }
+
+  return cookie
 }
 
 /**
@@ -76,7 +90,7 @@ export function hideBannerAlert (): void {
 
 /**
  * Start function which is called from the page, accepts a callback to initiate the analytics payload(s)
- * @param callback () => void
+ * @param callback
  */
 export function start (callback: () => void): void {
   const { userHasAllowedCookies, cookiesAllowed } = getCookieObject()
@@ -108,7 +122,7 @@ function setDomain (): string {
 
 /**
  * Checks the array of cookies a user consented to on their last visit
- * @param cookieArray string[]
+ * @param cookieArray
  */
 function haveAllCookiesBeenAccepted (cookieArray: string[]): boolean {
   if (cookieArray.length !== COOKIES.length) {
