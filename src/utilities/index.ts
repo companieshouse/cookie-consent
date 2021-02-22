@@ -10,7 +10,7 @@ function createCookie (value: CHCookie): void {
   const date = new Date()
   date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
   const expiryDate = date.toUTCString()
-  document.cookie = COOKIE_NAME + JSON.stringify(value) + '; expires=' + expiryDate + '; path=/; domain=' + setDomain()
+  document.cookie = COOKIE_NAME + '=' + JSON.stringify(value) + '; expires=' + expiryDate + '; path=/; domain=' + setDomain()
 }
 
 /**
