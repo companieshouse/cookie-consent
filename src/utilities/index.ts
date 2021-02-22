@@ -14,7 +14,6 @@ function createCookie (name: string, value: string, days: number): void {
   document.cookie = name + '=' + value + expires + '; path=/; domain=' + setDomain()
 }
 
-
 /**
  * Handles the logic when Cookies are accepted
  * @param callback () => void
@@ -112,8 +111,15 @@ function setDomain (): string {
  * @param cookieArray string[]
  */
 function haveAllCookiesBeenAccepted (cookieArray: string[]): boolean {
-  if (COOKIES.filter(x => !cookieArray.includes(x)).length === 0) {
-    return true
+  if (cookieArray.length !== COOKIES.length) {
+    return false
   }
-  return false
+
+  for (let i = 0; i < COOKIES.length; i++) {
+    if (COOKIES[i] !== cookieArray[i]) {
+      return false
+    }
+  }
+
+  return true
 }
