@@ -1,4 +1,4 @@
-import { COOKIES, COOKIE_NAME, URLS } from '../constants'
+import { COOKIES, COOKIE_NAME, PUBLIC_SUFFIX_URLS } from '../constants'
 import { CHCookie } from '../types'
 
 /**
@@ -110,12 +110,23 @@ export function start (callback: () => void): void {
  * Returns the highest level CH domain possible based on the Public Suffix List (https://publicsuffix.org/).
  */
 function setDomain (): string {
-  for (const url of URLS) {
-    if (window.location.hostname.includes(url)) {
-      return url
+  const hostname = window.location.hostname
+
+  const hostnameParts = hostname.split('.')
+
+  if (hostnameParts.length <= 2) {
+    return hostname
+  }
+
+  const strippedHostname = `.${hostnameParts.slice(1, hostnameParts.length).join('.')}`
+
+  for (const publicSuffixUrl of PUBLIC_SUFFIX_URLS) {
+    if (strippedHostname === publicSuffixUrl) {
+      return hostname
     }
   }
-  return window.location.hostname
+
+  return strippedHostname
 }
 
 /**
