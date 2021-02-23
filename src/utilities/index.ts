@@ -18,7 +18,6 @@ function createCookie (value: CHCookie): void {
  * @param callback
  */
 export function acceptCookies (callback: () => void): void {
-  callback()
   const cookieBanner = document.getElementById('cookie-banner')
   const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
 
@@ -33,6 +32,7 @@ export function acceptCookies (callback: () => void): void {
     cookieBanner.hidden = true
     cookieBannerAlert.removeAttribute('hidden')
   }
+  callback()
 }
 
 /**
@@ -111,11 +111,11 @@ export function start (callback: () => void): void {
  */
 function setDomain (): string {
   for (const url of URLS) {
-    if (window.location.host.includes(url)) {
+    if (window.location.hostname.includes(url)) {
       return url
     }
   }
-  return window.location.host
+  return window.location.hostname
 }
 
 /**
