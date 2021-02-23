@@ -1,8 +1,4 @@
-export { acceptCookies } from './utilities'
-export { rejectCookies } from './utilities'
-export { hideCookieBanners } from './utilities'
-export { start } from './utilities'
-
+/* eslint-disable */
 if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) {
     'use strict';
@@ -14,3 +10,5 @@ if (!String.prototype.includes) {
     return this.indexOf(search, start) !== -1;
   };
 }
+
+export { acceptCookies, hideCookieBanners, rejectCookies, start } from './utilities'
