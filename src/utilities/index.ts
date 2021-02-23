@@ -59,7 +59,7 @@ export function rejectCookies (): void {
  * Returns a cookie object if one exists, otherwise returns a default object
  */
 export function getCookieObject (): CHCookie {
-  var cookieArray = document.cookie.split(';')
+  const cookieArray = document.cookie.split(';')
 
   for (const cookie of cookieArray) {
     if (cookie.includes(COOKIE_NAME)) {
