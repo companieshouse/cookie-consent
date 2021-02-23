@@ -18,8 +18,8 @@ function createCookie (value: CHCookie): void {
  * @param callback
  */
 export function acceptCookies (callback: () => void): void {
-  const cookieBanner = document.getElementById('cookie-banner')
-  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
+  const cookiesAcceptOrRejectMessage: HTMLElement | null = document.querySelector('[cookie-message="accept-or-reject"]')
+  const cookiesAcceptedMessage: HTMLElement | null = document.querySelector('[cookie-message="accepted"]')
 
   const cookie: CHCookie = {
     userHasAllowedCookies: 'yes',
@@ -28,9 +28,11 @@ export function acceptCookies (callback: () => void): void {
 
   createCookie(cookie)
 
-  if (cookieBanner !== null && cookieBannerAlert !== null) {
-    cookieBanner.hidden = true
-    cookieBannerAlert.removeAttribute('hidden')
+  if (cookiesAcceptOrRejectMessage !== null) {
+    cookiesAcceptOrRejectMessage.hidden = true
+  }
+  if (cookiesAcceptedMessage !== null) {
+    cookiesAcceptedMessage.removeAttribute('hidden')
   }
   callback()
 }
@@ -39,8 +41,8 @@ export function acceptCookies (callback: () => void): void {
  * Handles the logic when Cookies are rejected
  */
 export function rejectCookies (): void {
-  const cookieBanner = document.getElementById('cookie-banner')
-  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
+  const cookiesAcceptOrRejectMessage: HTMLElement | null = document.querySelector('[cookie-message="accept-or-reject"]')
+  const cookiesRejectedMessage: HTMLElement | null = document.querySelector('[cookie-message="rejected"]')
 
   const cookie: CHCookie = {
     userHasAllowedCookies: 'no',
@@ -49,9 +51,11 @@ export function rejectCookies (): void {
 
   createCookie(cookie)
 
-  if (cookieBanner !== null && cookieBannerAlert !== null) {
-    cookieBanner.hidden = true
-    cookieBannerAlert.removeAttribute('hidden')
+  if (cookiesAcceptOrRejectMessage !== null) {
+    cookiesAcceptOrRejectMessage.hidden = true
+  }
+  if (cookiesRejectedMessage !== null) {
+    cookiesRejectedMessage.removeAttribute('hidden')
   }
 }
 
@@ -79,10 +83,18 @@ export function getCookieObject (): CHCookie {
 /**
  * Hides the banner alert shown after cookie consent is accepted or rejected
  */
-export function hideBannerAlert (): void {
-  const cookieBannerAlert = document.getElementById('govuk-cookie-banner__message')
-  if (cookieBannerAlert !== null) {
-    cookieBannerAlert.hidden = true
+export function hideCookieBanners (): void {
+  const cookieBanner: HTMLElement | null = document.querySelector('[cookie-banner]')
+  const cookiesAcceptedMessage: HTMLElement | null = document.querySelector('[cookie-message="accepted"]')
+  const cookiesRejectedMessage: HTMLElement | null = document.querySelector('[cookie-message="rejected"]')
+  if (cookieBanner !== null) {
+    cookieBanner.hidden = true
+  }
+  if (cookiesAcceptedMessage !== null) {
+    cookiesAcceptedMessage.hidden = true
+  }
+  if (cookiesRejectedMessage !== null) {
+    cookiesRejectedMessage.hidden = true
   }
 }
 
@@ -92,7 +104,8 @@ export function hideBannerAlert (): void {
  */
 export function start (callback: () => void): void {
   const { userHasAllowedCookies, cookiesAllowed } = getCookieObject()
-  const cookieBanner = document.getElementById('cookie-banner')
+  const cookieBanner = document.querySelector('[cookie-banner]')
+  const cookiesAcceptOrRejectMessage = document.querySelector('[cookie-message="accept-or-reject"]')
 
   if (userHasAllowedCookies === 'yes' && haveAllCookiesBeenAccepted(cookiesAllowed)) {
     callback()
@@ -100,9 +113,8 @@ export function start (callback: () => void): void {
     (userHasAllowedCookies === 'yes' && !haveAllCookiesBeenAccepted(cookiesAllowed)) ||
     userHasAllowedCookies === 'unset'
   ) {
-    if (cookieBanner !== null) {
-      cookieBanner.removeAttribute('hidden')
-    }
+    cookieBanner?.removeAttribute('hidden')
+    cookiesAcceptOrRejectMessage?.removeAttribute('hidden')
   }
 }
 
