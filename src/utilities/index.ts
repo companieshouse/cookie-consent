@@ -39,13 +39,22 @@ export function acceptCookies (callback: () => void): void {
   if (COOKIES_ACCEPTED_MESSAGE_ELEMENT !== null) {
     COOKIES_ACCEPTED_MESSAGE_ELEMENT.removeAttribute('hidden')
   }
-  callback()
+  try {
+    callback()
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 /**
  * Handles the logic when Cookies are rejected
  */
-export function rejectCookies (): void {
+export function rejectCookies (callback: () => void): void {
+  try {
+    callback()
+  } catch (e) {
+    console.error(e)
+  }
   const cookie: CHCookie = {
     userHasAllowedCookies: 'no',
     cookiesAllowed: []
@@ -105,7 +114,11 @@ export function start (callback: () => void): void {
   const { userHasAllowedCookies, cookiesAllowed } = getCookieObject()
 
   if (userHasAllowedCookies === 'yes' && haveAllCookiesBeenAccepted(cookiesAllowed)) {
-    callback()
+    try {
+      callback()
+    } catch (e) {
+      console.error(e)
+    }
   } else if (
     (userHasAllowedCookies === 'yes' && !haveAllCookiesBeenAccepted(cookiesAllowed)) ||
     userHasAllowedCookies === 'unset'
