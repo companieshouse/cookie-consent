@@ -98,7 +98,7 @@ describe('Get DOM Element tests', () => {
   })
 })
 
-describe('Hide Cookie Banner test', () => {
+describe('Hide Cookie Banner tests', () => {
   it('should set a hide the cookie banner and accepted message if they are visible', () => {
     const dom = new JSDOM(`
       <html lang="en">
