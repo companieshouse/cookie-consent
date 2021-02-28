@@ -6,7 +6,7 @@ import {
  * Returns the highest level CH domain possible based on the Public Suffix List (https://publicsuffix.org/).
  */
 export function setDomain (): string {
-  const hostname = window.location.hostname
+  const hostname = window.location.hostname.toLowerCase()
 
   const hostnameParts = hostname.split('.')
 
