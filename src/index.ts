@@ -1,12 +1,14 @@
-import { checkCookieIsSet } from './utilities'
+/* eslint-disable */
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    'use strict';
 
-if (checkCookieIsSet() === 'yes') {
-  const cookieBanner = document.getElementById('cookie-banner')
-  if (cookieBanner !== null) {
-    cookieBanner.hidden = true
-  }
+    if (search as any instanceof RegExp) {
+      throw TypeError('first argument must not be a RegExp');
+    }
+    if (start === undefined) { start = 0; }
+    return this.indexOf(search, start) !== -1;
+  };
 }
 
-export { acceptCookies } from './utilities'
-export { rejectCookies } from './utilities'
-export { hideBannerAlert } from './utilities'
+export { acceptCookies, hideCookieBanners, rejectCookies, start } from './utilities'
