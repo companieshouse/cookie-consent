@@ -54,7 +54,7 @@ describe('Accept Cookies tests', () => {
     expect(document.cookie).to.equal(`${COOKIE_NAME}={"userHasAllowedCookies":"yes","cookiesAllowed":${JSON.stringify(COOKIES)}}`)
   })
 
-  it('should set a cookie, hide the accept or reject message and log an error if the callback throws', () => {
+  it('should set a cookie, hide the accept or reject message, show the accepted message and log an error if the callback throws', () => {
     const html = `
     <html lang="en">
       <body>
