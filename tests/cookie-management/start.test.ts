@@ -1,7 +1,8 @@
-import { JSDOM, CookieJar } from 'jsdom'
+import { expect, use } from 'chai'
+import { CookieJar } from 'jsdom'
 import { spy } from 'sinon'
 import { start } from '../../src/cookie-management'
-import { expect, use } from 'chai'
+import { createJSDOM, defaultHTML, defaultURL } from '../test-utilities'
 import { CHCookie } from '../../src/types'
 import { COOKIES, COOKIE_NAME } from '../../src/constants'
 import chaiDom = require('chai-dom')
@@ -12,27 +13,12 @@ use(chaiDom)
 use(dirtyChai)
 use(sinonChai)
 
-const HTML = `
-<html lang="en">
-  <body>
-    <div id="cookie-banner" hidden>
-      <div id="accept-or-reject-message" hidden></div>
-      <div id="accepted-cookies-message" hidden></div>
-      <div id="rejected-cookies-message" hidden></div>
-    </div>
-  </body>
-</html>
-`
-
-const URL = 'http://cookies.companieshouse.gov.uk'
+const cleanup = createJSDOM()
 
 describe('Start function tests', () => {
+  afterEach(cleanup)
   it('should show the cookie banner, accept or reject message, and not call the callback if the user has not made a choice yet', () => {
-    const dom = new JSDOM(HTML)
-    // @ts-expect-error
-    global.window = dom?.window
-    global.document = dom?.window?.document
-
+    createJSDOM()
     const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
     const mockCookieBanner = document.getElementById('cookie-banner')
     const mockCookiesAcceptedMessage = document.getElementById('accepted-cookies-message')
@@ -54,17 +40,13 @@ describe('Start function tests', () => {
       userHasAllowedCookies: 'yes',
       cookiesAllowed: COOKIES
     }
-
     const cookieJar = new CookieJar()
-    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, URL, (x) => console.log)
-    const dom = new JSDOM(HTML, {
-      url: URL,
+    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+
+    createJSDOM(defaultHTML, {
+      url: defaultURL,
       cookieJar
     })
-
-    // @ts-expect-error
-    global.window = dom?.window
-    global.document = dom?.window?.document
 
     const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
     const mockCookieBanner = document.getElementById('cookie-banner')
@@ -89,15 +71,11 @@ describe('Start function tests', () => {
     }
 
     const cookieJar = new CookieJar()
-    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, URL, (x) => console.log)
-    const dom = new JSDOM(HTML, {
-      url: URL,
+    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+    createJSDOM(defaultHTML, {
+      url: defaultURL,
       cookieJar
     })
-
-    // @ts-expect-error
-    global.window = dom?.window
-    global.document = dom?.window?.document
 
     const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
     const mockCookieBanner = document.getElementById('cookie-banner')

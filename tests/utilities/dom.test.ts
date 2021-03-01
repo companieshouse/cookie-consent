@@ -1,6 +1,5 @@
-import { JSDOM } from 'jsdom'
 import { expect, use } from 'chai'
-import { defaultJSDOM } from '../index'
+import { createJSDOM } from '../test-utilities'
 import {
   getDomElements,
   hideCookieBanners
@@ -9,37 +8,13 @@ import chaiDom = require('chai-dom')
 
 use(chaiDom)
 
-const cleanup = defaultJSDOM()
+const cleanup = createJSDOM()
 
 describe('Get DOM Element tests', () => {
-  before(() => {
-    defaultJSDOM()
-  })
-
-  afterEach(() => {
-    document.body.innerHTML = ''
-    document.head.innerHTML = ''
-  })
-
-  after(() => {
-    cleanup()
-  })
+  afterEach(cleanup)
 
   it('should return an object of DOM elements when all DOM elements are present', () => {
-    const dom = new JSDOM(`
-      <html lang="en">
-        <body>
-          <div id="cookie-banner" hidden>
-            <div id="accept-or-reject-message" hidden></div>
-            <div id="accepted-cookies-message" hidden></div>
-            <div id="rejected-cookies-message" hidden></div>
-          </div>
-        </body>
-      </html>
-    `)
-    // @ts-expect-error
-    global.window = dom?.window
-    global.document = dom?.window?.document
+    createJSDOM()
 
     const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
     const mockCookieBanner = document.getElementById('cookie-banner')
@@ -60,15 +35,13 @@ describe('Get DOM Element tests', () => {
   })
 
   it('should return an object of null values when no DOM elements are present', () => {
-    const dom = new JSDOM(`
+    const html = `
       <html lang="en">
         <body>
         </body>
       </html>
-    `)
-    // @ts-expect-error
-    global.window = dom.window
-    global.document = dom.window.document
+    `
+    createJSDOM(html)
 
     const {
       acceptOrRejectMessage,
@@ -84,7 +57,7 @@ describe('Get DOM Element tests', () => {
   })
 
   it('should return a mixture of null and DOM elements when some elements are present', () => {
-    const dom = new JSDOM(`
+    const html = `
       <html lang="en">
         <body>
           <div id="cookie-banner" hidden>
@@ -92,10 +65,8 @@ describe('Get DOM Element tests', () => {
           </div>
         </body>
       </html>
-    `)
-    // @ts-expect-error
-    global.window = dom?.window
-    global.document = dom?.window?.document
+    `
+    createJSDOM(html)
 
     const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
     const mockCookieBanner = document.getElementById('cookie-banner')
@@ -115,17 +86,10 @@ describe('Get DOM Element tests', () => {
 })
 
 describe('Hide Cookie Banner tests', () => {
-  afterEach(() => {
-    document.body.innerHTML = ''
-    document.head.innerHTML = ''
-  })
-
-  after(() => {
-    cleanup()
-  })
+  afterEach(cleanup)
 
   it('should set a hide the cookie banner and accepted message if they are visible', () => {
-    const dom = new JSDOM(`
+    const html = `
       <html lang="en">
         <body>
           <div id="cookie-banner">
@@ -135,10 +99,8 @@ describe('Hide Cookie Banner tests', () => {
           </div>
         </body>
       </html>
-    `)
-    // @ts-expect-error
-    global.window = dom?.window
-    global.document = dom?.window?.document
+    `
+    createJSDOM(html)
 
     hideCookieBanners()
 
@@ -150,7 +112,7 @@ describe('Hide Cookie Banner tests', () => {
   })
 
   it('should set a hide the cookie banner and rejected message if they are visible', () => {
-    const dom = new JSDOM(`
+    const html = `
       <html lang="en">
         <body>
           <div id="cookie-banner">
@@ -160,10 +122,8 @@ describe('Hide Cookie Banner tests', () => {
           </div>
         </body>
       </html>
-    `)
-    // @ts-expect-error
-    global.window = dom?.window
-    global.document = dom?.window?.document
+    `
+    createJSDOM(html)
 
     hideCookieBanners()
 
