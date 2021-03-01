@@ -35,7 +35,7 @@ describe('Start function tests', () => {
     expect(mockCookiesRejectedMessage).to.have.attribute('hidden')
   })
 
-  it('Should call the callback if the user has allowed cookies', () => {
+  it('should call the callback if the user has allowed cookies', () => {
     const cookie: CHCookie = {
       userHasAllowedCookies: 'yes',
       cookiesAllowed: COOKIES
@@ -64,7 +64,7 @@ describe('Start function tests', () => {
     expect(mockCookiesRejectedMessage).to.have.attribute('hidden')
   })
 
-  it('Should not call the callback, or show any DOM elements if the user has rejected cookies', () => {
+  it('should not call the callback, or show any DOM elements if the user has rejected cookies', () => {
     const cookie: CHCookie = {
       userHasAllowedCookies: 'no',
       cookiesAllowed: []
