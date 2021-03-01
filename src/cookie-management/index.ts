@@ -1,13 +1,10 @@
 import {
   COOKIES,
-  COOKIES_ACCEPTED_MESSAGE_ELEMENT,
-  COOKIES_ACCEPT_OR_REJECT_MESSAGE_ELEMENT,
-  COOKIES_REJECTED_MESSAGE_ELEMENT,
-  COOKIE_BANNER_ELEMENT,
-  COOKIE_NAME,
-  PUBLIC_SUFFIX_URLS
+  COOKIE_NAME
 } from '../constants'
 import { CHCookie } from '../types'
+import { getDomElements } from '../utilities/dom'
+import { setDomain } from '../utilities/domains'
 
 /**
  * Creates the Companies House cookie tracking cookie
@@ -26,6 +23,7 @@ function createCookie (value: CHCookie): void {
  * @param callback
  */
 export function acceptCookies (callback: () => void): void {
+  const { acceptOrRejectMessage, cookiesAcceptedMessage } = getDomElements()
   const cookie: CHCookie = {
     userHasAllowedCookies: 'yes',
     cookiesAllowed: COOKIES
@@ -33,12 +31,13 @@ export function acceptCookies (callback: () => void): void {
 
   createCookie(cookie)
 
-  if (COOKIES_ACCEPT_OR_REJECT_MESSAGE_ELEMENT !== null) {
-    COOKIES_ACCEPT_OR_REJECT_MESSAGE_ELEMENT.hidden = true
+  if (acceptOrRejectMessage !== null) {
+    acceptOrRejectMessage.hidden = true
   }
-  if (COOKIES_ACCEPTED_MESSAGE_ELEMENT !== null) {
-    COOKIES_ACCEPTED_MESSAGE_ELEMENT.removeAttribute('hidden')
+  if (cookiesAcceptedMessage !== null) {
+    cookiesAcceptedMessage.removeAttribute('hidden')
   }
+
   try {
     callback()
   } catch (e) {
@@ -55,6 +54,8 @@ export function rejectCookies (callback: () => void): void {
   } catch (e) {
     console.error(e)
   }
+
+  const { acceptOrRejectMessage, cookiesRejectedMessage } = getDomElements()
   const cookie: CHCookie = {
     userHasAllowedCookies: 'no',
     cookiesAllowed: []
@@ -62,11 +63,11 @@ export function rejectCookies (callback: () => void): void {
 
   createCookie(cookie)
 
-  if (COOKIES_ACCEPT_OR_REJECT_MESSAGE_ELEMENT !== null) {
-    COOKIES_ACCEPT_OR_REJECT_MESSAGE_ELEMENT.hidden = true
+  if (acceptOrRejectMessage !== null) {
+    acceptOrRejectMessage.hidden = true
   }
-  if (COOKIES_REJECTED_MESSAGE_ELEMENT !== null) {
-    COOKIES_REJECTED_MESSAGE_ELEMENT.removeAttribute('hidden')
+  if (cookiesRejectedMessage !== null) {
+    cookiesRejectedMessage.removeAttribute('hidden')
   }
 }
 
@@ -92,25 +93,11 @@ export function getCookieObject (): CHCookie {
 }
 
 /**
- * Hides the banner alert shown after cookie consent is accepted or rejected
- */
-export function hideCookieBanners (): void {
-  if (COOKIE_BANNER_ELEMENT !== null) {
-    COOKIE_BANNER_ELEMENT.hidden = true
-  }
-  if (COOKIES_ACCEPTED_MESSAGE_ELEMENT !== null) {
-    COOKIES_ACCEPTED_MESSAGE_ELEMENT.hidden = true
-  }
-  if (COOKIES_REJECTED_MESSAGE_ELEMENT !== null) {
-    COOKIES_REJECTED_MESSAGE_ELEMENT.hidden = true
-  }
-}
-
-/**
  * Start function which is called from the page, accepts a callback to initiate the analytics payload(s)
  * @param callback
  */
 export function start (callback: () => void): void {
+  const { acceptOrRejectMessage, cookieBanner } = getDomElements()
   const { userHasAllowedCookies, cookiesAllowed } = getCookieObject()
 
   if (userHasAllowedCookies === 'yes' && haveAllCookiesBeenAccepted(cookiesAllowed)) {
@@ -123,32 +110,9 @@ export function start (callback: () => void): void {
     (userHasAllowedCookies === 'yes' && !haveAllCookiesBeenAccepted(cookiesAllowed)) ||
     userHasAllowedCookies === 'unset'
   ) {
-    COOKIE_BANNER_ELEMENT?.removeAttribute('hidden')
-    COOKIES_ACCEPT_OR_REJECT_MESSAGE_ELEMENT?.removeAttribute('hidden')
+    cookieBanner?.removeAttribute('hidden')
+    acceptOrRejectMessage?.removeAttribute('hidden')
   }
-}
-
-/**
- * Returns the highest level CH domain possible based on the Public Suffix List (https://publicsuffix.org/).
- */
-function setDomain (): string {
-  const hostname = window.location.hostname
-
-  const hostnameParts = hostname.split('.')
-
-  if (hostnameParts.length <= 2) {
-    return hostname
-  }
-
-  const strippedHostname = `.${hostnameParts.slice(1, hostnameParts.length).join('.')}`
-
-  for (const publicSuffixUrl of PUBLIC_SUFFIX_URLS) {
-    if (strippedHostname === publicSuffixUrl) {
-      return hostname
-    }
-  }
-
-  return strippedHostname
 }
 
 /**
