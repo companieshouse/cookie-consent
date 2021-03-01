@@ -4,6 +4,7 @@ export interface CHCookie {
 }
 
 type DOMElement = HTMLElement | null
+
 export interface CookieConsentDOMElements {
   acceptOrRejectMessage: DOMElement
   cookieBanner: DOMElement
