@@ -5,7 +5,7 @@ import dirtyChai = require('dirty-chai')
 
 use(dirtyChai)
 
-describe('Have all cookies been accepted tests', ()=> {
+describe('Have all cookies been accepted tests', () => {
   it('returns false if the cookie array length is different to COOKIES constant', () => {
     const cookieArrayPlusOne = [...COOKIES, 'newCookie']
     const firstReturnValue = haveAllCookiesBeenAccepted(cookieArrayPlusOne)
