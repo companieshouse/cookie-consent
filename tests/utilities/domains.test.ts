@@ -5,9 +5,7 @@ import { setDomain } from '../../src/utilities/domains'
 const cleanup = createJSDOM()
 
 describe('setDomain tests', () => {
-  afterEach(() => {
-    cleanup()
-  })
+  afterEach(cleanup)
 
   it('should return the full hostname if the length is less than or equal to 2', () => {
     createJSDOM(defaultHTML, { url: 'http://foo.bar' })
