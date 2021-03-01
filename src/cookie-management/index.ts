@@ -119,7 +119,7 @@ export function start (callback: () => void): void {
  * Checks the array of cookies a user consented to on their last visit
  * @param cookieArray
  */
-function haveAllCookiesBeenAccepted (cookieArray: string[]): boolean {
+export function haveAllCookiesBeenAccepted (cookieArray: string[]): boolean {
   if (cookieArray.length !== COOKIES.length) {
     return false
   }
