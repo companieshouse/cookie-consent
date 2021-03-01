@@ -1,5 +1,5 @@
 // Inspired by https://github.com/modosc/global-jsdom/blob/master/esm/index.mjs
-import { JSDOM } from 'jsdom'
+import { ConstructorOptions, JSDOM } from 'jsdom'
 
 export const defaultHTML = `
 <html lang="en">
@@ -14,29 +14,32 @@ export const defaultHTML = `
 `
 export const defaultURL = 'http://cookies.companieshouse.gov.uk'
 
-const KEYS: any[] = []
+const KEYS: string[] = []
 
-export function defaultJSDOM (html = defaultHTML, options = { url: defaultURL }): () => void {
-  if (!('url' in options)) { Object.assign(options, { url: defaultURL }) }
-
+export function createJSDOM (html = defaultHTML, options: ConstructorOptions = { url: defaultURL }): () => void {
   const jsdom = new JSDOM(html, options)
   const { window } = jsdom
   const { document } = window
 
   if (KEYS.length === 0) {
     KEYS.push(...Object.getOwnPropertyNames(window).filter((k) => !k.startsWith('_')).filter((k) => !(k in global)))
-    KEYS.push('$jsdom')
   }
 
-  // @ts-expect-error
-  KEYS.forEach((key) => { global[key] = window[key] })
+  for (const key of KEYS) {
+    // @ts-expect-error
+    global[key] = window[key]
+  }
 
   global.document = document
   // @ts-expect-error
   global.window = window
   window.console = global.console
 
-  // @ts-expect-error
-  // eslint-disable-next-line
-  return (): void => { KEYS.forEach((key) => delete global[key]) }
+  return (): void => {
+    for (const key of KEYS) {
+      // @ts-expect-error
+      // eslint-disable-next-line
+      delete global[key]
+    }
+  }
 }
