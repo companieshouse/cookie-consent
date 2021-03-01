@@ -13,6 +13,8 @@ use(chaiDom)
 
 const cleanup = createJSDOM()
 
+const defaultAcceptedCookie = `${COOKIE_NAME}={"userHasAllowedCookies":"yes","cookiesAllowed":${JSON.stringify(COOKIES)}}`
+
 describe('Accept Cookies tests', () => {
   afterEach(cleanup)
 
@@ -35,7 +37,7 @@ describe('Accept Cookies tests', () => {
     const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
     const mockCookiesAcceptedMessage = document.getElementById('accepted-cookies-message')
 
-    expect(document.cookie).to.equal(`${COOKIE_NAME}={"userHasAllowedCookies":"yes","cookiesAllowed":${JSON.stringify(COOKIES)}}`)
+    expect(document.cookie).to.equal(defaultAcceptedCookie)
     expect(mockAcceptOrRejectMessage).to.have.attribute('hidden')
     expect(mockCookiesAcceptedMessage).to.not.have.attribute('hidden')
   })
@@ -51,7 +53,7 @@ describe('Accept Cookies tests', () => {
 
     acceptCookies(callback)
 
-    expect(document.cookie).to.equal(`${COOKIE_NAME}={"userHasAllowedCookies":"yes","cookiesAllowed":${JSON.stringify(COOKIES)}}`)
+    expect(document.cookie).to.equal(defaultAcceptedCookie)
   })
 
   it('should set a cookie, hide the accept or reject message, show the accepted message and log an error if the callback throws', () => {
@@ -75,7 +77,7 @@ describe('Accept Cookies tests', () => {
     const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
     const mockCookiesAcceptedMessage = document.getElementById('accepted-cookies-message')
 
-    expect(document.cookie).to.equal(`${COOKIE_NAME}={"userHasAllowedCookies":"yes","cookiesAllowed":${JSON.stringify(COOKIES)}}`)
+    expect(document.cookie).to.equal(defaultAcceptedCookie)
     expect(consoleSpy).to.have.been.called()
     expect(mockAcceptOrRejectMessage).to.have.attribute('hidden')
     expect(mockCookiesAcceptedMessage).to.not.have.attribute('hidden')
