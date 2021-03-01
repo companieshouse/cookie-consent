@@ -1,14 +1,30 @@
+import { JSDOM } from 'jsdom'
+import { expect, use } from 'chai'
+import { defaultJSDOM } from '../index'
 import {
   getDomElements,
   hideCookieBanners
 } from '../../src/utilities/dom'
-import { JSDOM } from 'jsdom'
-import { expect, use } from 'chai'
 import chaiDom = require('chai-dom')
 
 use(chaiDom)
 
+const cleanup = defaultJSDOM()
+
 describe('Get DOM Element tests', () => {
+  before(() => {
+    defaultJSDOM()
+  })
+
+  afterEach(() => {
+    document.body.innerHTML = ''
+    document.head.innerHTML = ''
+  })
+
+  after(() => {
+    cleanup()
+  })
+
   it('should return an object of DOM elements when all DOM elements are present', () => {
     const dom = new JSDOM(`
       <html lang="en">
@@ -51,8 +67,8 @@ describe('Get DOM Element tests', () => {
       </html>
     `)
     // @ts-expect-error
-    global.window = dom?.window
-    global.document = dom?.window?.document
+    global.window = dom.window
+    global.document = dom.window.document
 
     const {
       acceptOrRejectMessage,
@@ -99,6 +115,15 @@ describe('Get DOM Element tests', () => {
 })
 
 describe('Hide Cookie Banner tests', () => {
+  afterEach(() => {
+    document.body.innerHTML = ''
+    document.head.innerHTML = ''
+  })
+
+  after(() => {
+    cleanup()
+  })
+
   it('should set a hide the cookie banner and accepted message if they are visible', () => {
     const dom = new JSDOM(`
       <html lang="en">
