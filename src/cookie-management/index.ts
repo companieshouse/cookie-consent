@@ -10,7 +10,7 @@ import { setDomain } from '../utilities/domains'
  * Creates the Companies House cookie tracking cookie
  * @param value
  */
-function createCookie (value: CHCookie): void {
+export function createCookie (value: CHCookie): void {
   const days = 365
   const date = new Date()
   date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
