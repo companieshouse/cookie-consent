@@ -35,6 +35,34 @@ describe('Start function tests', () => {
     expect(mockCookiesRejectedMessage).to.have.attribute('hidden')
   })
 
+  it('should show the cookie banner, accept or reject message, and not call the callback if new cookies have been added', () => {
+    const cookie: CHCookie = {
+      userHasAllowedCookies: 'yes',
+      cookiesAllowed: [...COOKIES, 'newCookie']
+    }
+    const cookieJar = new CookieJar()
+    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+    createJSDOM(defaultHTML, {
+      url: defaultURL,
+      cookieJar
+    })
+
+    const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
+    const mockCookieBanner = document.getElementById('cookie-banner')
+    const mockCookiesAcceptedMessage = document.getElementById('accepted-cookies-message')
+    const mockCookiesRejectedMessage = document.getElementById('rejected-cookies-message')
+
+    const callback = spy()
+
+    start(callback)
+
+    expect(callback).to.not.have.been.called()
+    expect(mockAcceptOrRejectMessage).to.not.have.attribute('hidden')
+    expect(mockCookieBanner).to.not.have.attribute('hidden')
+    expect(mockCookiesAcceptedMessage).to.have.attribute('hidden')
+    expect(mockCookiesRejectedMessage).to.have.attribute('hidden')
+  })
+
   it('should call the callback if the user has allowed cookies but not show any dom elements', () => {
     const cookie: CHCookie = {
       userHasAllowedCookies: 'yes',
@@ -42,7 +70,6 @@ describe('Start function tests', () => {
     }
     const cookieJar = new CookieJar()
     cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
-
     createJSDOM(defaultHTML, {
       url: defaultURL,
       cookieJar
@@ -69,7 +96,6 @@ describe('Start function tests', () => {
       userHasAllowedCookies: 'no',
       cookiesAllowed: []
     }
-
     const cookieJar = new CookieJar()
     cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
     createJSDOM(defaultHTML, {
