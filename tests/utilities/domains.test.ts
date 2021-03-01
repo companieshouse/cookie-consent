@@ -1,4 +1,5 @@
 import { expect } from 'chai'
+import { defaultJSDOM } from '../index'
 import { setDomain } from '../../src/utilities/domains'
 
 function setHostname (hostname: string): void {
@@ -12,13 +13,19 @@ function setHostname (hostname: string): void {
 }
 
 describe('setDomain tests', () => {
+  before(() => {
+    defaultJSDOM()
+  })
+
+  after(() => {
+    const cleanup = defaultJSDOM()
+    cleanup()
+  })
+
   it('should return the full hostname if the length is less than or equal to 2', () => {
     const mockHostname = 'foo.bar'
-
     setHostname(mockHostname)
-
     const domain = setDomain()
-
     expect(domain).to.equal(mockHostname)
   })
 
