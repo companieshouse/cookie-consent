@@ -1,8 +1,7 @@
 import { spy, stub } from 'sinon'
 import { use, expect } from 'chai'
-import { createJSDOM } from '../test-utilities'
+import { createJSDOM, defaultAcceptedCookie } from '../test-utilities'
 import { acceptCookies } from '../../src'
-import { COOKIES, COOKIE_NAME } from '../../src/constants'
 import dirtyChai = require('dirty-chai')
 import sinonChai = require('sinon-chai')
 import chaiDom = require ('chai-dom')
@@ -12,8 +11,6 @@ use(sinonChai)
 use(chaiDom)
 
 const cleanup = createJSDOM()
-
-const defaultAcceptedCookie = `${COOKIE_NAME}={"userHasAllowedCookies":"yes","cookiesAllowed":${JSON.stringify(COOKIES)}}`
 
 describe('Accept Cookies tests', () => {
   afterEach(cleanup)
