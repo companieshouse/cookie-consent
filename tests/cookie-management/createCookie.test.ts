@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import { createJSDOM, defaultHTML, defaultURL } from '../test-utilities'
+import { createJSDOM, defaultAcceptedCookie, defaultHTML, defaultURL } from '../test-utilities'
 import { createCookie } from '../../src/cookie-management'
-import { COOKIES, COOKIE_NAME } from '../../src/constants'
+import { COOKIES } from '../../src/constants'
 import { CHCookie } from '../../src/types'
 
 const cleanup = createJSDOM()
@@ -17,6 +17,6 @@ describe('Create cookie tests', () => {
 
     createCookie(cookie)
 
-    expect(document.cookie).to.contain(`${COOKIE_NAME}=${JSON.stringify(cookie)}`)
+    expect(document.cookie).to.contain(defaultAcceptedCookie)
   })
 })

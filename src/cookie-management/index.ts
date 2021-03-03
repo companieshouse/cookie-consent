@@ -1,6 +1,8 @@
 import {
+  ACCEPTED_COOKIE,
   COOKIES,
-  COOKIE_NAME
+  COOKIE_NAME,
+  REJECTED_COOKIE
 } from '../constants'
 import { CHCookie } from '../types'
 import { getDomElements } from '../utilities/dom'
@@ -15,7 +17,9 @@ export function createCookie (value: CHCookie): void {
   const date = new Date()
   date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
   const expiryDate = date.toUTCString()
-  document.cookie = COOKIE_NAME + '=' + JSON.stringify(value) + '; expires=' + expiryDate + '; path=/; domain=' + setDomain()
+  const cookieValue = JSON.stringify(value)
+  const base64CookieValue = btoa(cookieValue)
+  document.cookie = COOKIE_NAME + '=' + base64CookieValue + '; expires=' + expiryDate + '; path=/; domain=' + setDomain()
 }
 
 /**
@@ -24,12 +28,8 @@ export function createCookie (value: CHCookie): void {
  */
 export function acceptCookies (callback: () => void): void {
   const { acceptOrRejectMessage, cookiesAcceptedMessage } = getDomElements()
-  const cookie: CHCookie = {
-    userHasAllowedCookies: 'yes',
-    cookiesAllowed: COOKIES
-  }
 
-  createCookie(cookie)
+  createCookie(ACCEPTED_COOKIE)
 
   if (acceptOrRejectMessage !== null) {
     acceptOrRejectMessage.hidden = true
@@ -56,12 +56,8 @@ export function rejectCookies (callback: () => void): void {
   }
 
   const { acceptOrRejectMessage, cookiesRejectedMessage } = getDomElements()
-  const cookie: CHCookie = {
-    userHasAllowedCookies: 'no',
-    cookiesAllowed: []
-  }
 
-  createCookie(cookie)
+  createCookie(REJECTED_COOKIE)
 
   if (acceptOrRejectMessage !== null) {
     acceptOrRejectMessage.hidden = true
@@ -80,7 +76,8 @@ export function getCookieObject (): CHCookie {
   for (const cookie of cookieArray) {
     if (cookie.includes(COOKIE_NAME)) {
       const cookieTuple = cookie.split('=')
-      return JSON.parse(cookieTuple[1]) as CHCookie
+      const decodedCookieValue = atob(cookieTuple[1])
+      return JSON.parse(decodedCookieValue) as CHCookie
     }
   }
 

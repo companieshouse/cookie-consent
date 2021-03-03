@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import { createJSDOM, defaultHTML, defaultURL } from '../test-utilities'
+import { createJSDOM, defaultAcceptedCookie, defaultHTML, defaultURL } from '../test-utilities'
 import { getCookieObject } from '../../src/cookie-management'
-import { COOKIES, COOKIE_NAME } from '../../src/constants'
+import { COOKIES } from '../../src/constants'
 import { CHCookie } from '../../src/types'
 import { CookieJar } from 'jsdom'
 
@@ -15,7 +15,7 @@ describe('Get cookie object tests', () => {
       cookiesAllowed: COOKIES
     }
     const cookieJar = new CookieJar()
-    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+    cookieJar.setCookie(defaultAcceptedCookie, defaultURL, (x) => console.log)
     createJSDOM(defaultHTML, {
       url: defaultURL,
       cookieJar
@@ -32,7 +32,7 @@ describe('Get cookie object tests', () => {
       cookiesAllowed: COOKIES
     }
     const cookieJar = new CookieJar()
-    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+    cookieJar.setCookie(defaultAcceptedCookie, defaultURL, (x) => console.log)
     cookieJar.setCookie('foo=bar', defaultURL, (x) => console.log)
     cookieJar.setCookie('bar=baz', defaultURL, (x) => console.log)
     createJSDOM(defaultHTML, {

@@ -2,7 +2,7 @@ import { expect, use } from 'chai'
 import { CookieJar } from 'jsdom'
 import { spy, stub } from 'sinon'
 import { start } from '../../src/cookie-management'
-import { createJSDOM, defaultHTML, defaultURL } from '../test-utilities'
+import { base64Encode, createJSDOM, defaultAcceptedCookie, defaultHTML, defaultRejectedCookie, defaultURL } from '../test-utilities'
 import { CHCookie } from '../../src/types'
 import { COOKIES, COOKIE_NAME } from '../../src/constants'
 import chaiDom = require('chai-dom')
@@ -41,7 +41,7 @@ describe('Start function tests', () => {
       cookiesAllowed: [...COOKIES, 'newCookie']
     }
     const cookieJar = new CookieJar()
-    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+    cookieJar.setCookie(`${COOKIE_NAME}=${base64Encode(JSON.stringify(cookie))}`, defaultURL, (x) => console.log)
     createJSDOM(defaultHTML, {
       url: defaultURL,
       cookieJar
@@ -64,12 +64,8 @@ describe('Start function tests', () => {
   })
 
   it('should call the callback if the user has allowed cookies but not show any dom elements', () => {
-    const cookie: CHCookie = {
-      userHasAllowedCookies: 'yes',
-      cookiesAllowed: COOKIES
-    }
     const cookieJar = new CookieJar()
-    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+    cookieJar.setCookie(defaultAcceptedCookie, defaultURL, (x) => console.log)
     createJSDOM(defaultHTML, {
       url: defaultURL,
       cookieJar
@@ -92,12 +88,8 @@ describe('Start function tests', () => {
   })
 
   it('should not call the callback, or show any DOM elements if the user has rejected cookies', () => {
-    const cookie: CHCookie = {
-      userHasAllowedCookies: 'no',
-      cookiesAllowed: []
-    }
     const cookieJar = new CookieJar()
-    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+    cookieJar.setCookie(defaultRejectedCookie, defaultURL, (x) => console.log)
     createJSDOM(defaultHTML, {
       url: defaultURL,
       cookieJar
@@ -120,12 +112,8 @@ describe('Start function tests', () => {
   })
 
   it('should log an error if the callback throws and not show any dom elements', () => {
-    const cookie: CHCookie = {
-      userHasAllowedCookies: 'yes',
-      cookiesAllowed: COOKIES
-    }
     const cookieJar = new CookieJar()
-    cookieJar.setCookie(`${COOKIE_NAME}=${JSON.stringify(cookie)}`, defaultURL, (x) => console.log)
+    cookieJar.setCookie(defaultAcceptedCookie, defaultURL, (x) => console.log)
 
     createJSDOM(defaultHTML, {
       url: defaultURL,

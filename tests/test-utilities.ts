@@ -1,5 +1,6 @@
 // Inspired by https://github.com/modosc/global-jsdom/blob/master/esm/index.mjs
 import { ConstructorOptions, JSDOM } from 'jsdom'
+import { ACCEPTED_COOKIE, COOKIE_NAME, REJECTED_COOKIE } from '../src/constants'
 
 export const defaultHTML = `
 <html lang="en">
@@ -43,3 +44,20 @@ export function createJSDOM (html = defaultHTML, options: ConstructorOptions = {
     }
   }
 }
+
+// These are needed as btoa and atob are not available in node
+export function base64Encode (value: string): string {
+  return Buffer.from(value, 'binary').toString('base64')
+}
+
+export function base64Decode (value: string): string {
+  return Buffer.from(value, 'base64').toString('binary')
+}
+
+const acceptedCookieJson = JSON.stringify(ACCEPTED_COOKIE)
+
+export const defaultAcceptedCookie = `${COOKIE_NAME}=${base64Encode(acceptedCookieJson)}`
+
+const rejectedCookieJson = JSON.stringify(REJECTED_COOKIE)
+
+export const defaultRejectedCookie = `${COOKIE_NAME}=${base64Encode(rejectedCookieJson)}`
