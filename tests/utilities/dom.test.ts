@@ -133,6 +133,7 @@ describe('Hide Cookie Banner tests', () => {
     expect(mockCookieBanner).to.have.attribute('hidden')
     expect(mockCookiesRejectedMessage).to.have.attribute('hidden')
   })
+
   it('should hide any element if they are visible', () => {
     const html = `
       <html lang="en">
