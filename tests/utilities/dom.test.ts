@@ -133,4 +133,31 @@ describe('Hide Cookie Banner tests', () => {
     expect(mockCookieBanner).to.have.attribute('hidden')
     expect(mockCookiesRejectedMessage).to.have.attribute('hidden')
   })
+
+  it('should hide any element if they are visible', () => {
+    const html = `
+      <html lang="en">
+        <body>
+          <div id="cookie-banner">
+            <div id="accept-or-reject-message"></div>
+            <div id="accepted-cookies-message"></div>
+            <div id="rejected-cookies-message"></div>
+          </div>
+        </body>
+      </html>
+    `
+    createJSDOM(html)
+
+    hideCookieBanners()
+
+    const mockAcceptOrRejectMessage = document.getElementById('accept-or-reject-message')
+    const mockCookieBanner = document.getElementById('cookie-banner')
+    const mockCookiesAcceptedMessage = document.getElementById('accepted-cookies-message')
+    const mockCookiesRejectedMessage = document.getElementById('rejected-cookies-message')
+
+    expect(mockAcceptOrRejectMessage).to.have.attribute('hidden')
+    expect(mockCookieBanner).to.have.attribute('hidden')
+    expect(mockCookiesAcceptedMessage).to.have.attribute('hidden')
+    expect(mockCookiesRejectedMessage).to.have.attribute('hidden')
+  })
 })

@@ -17,11 +17,15 @@ export function getDomElements (): CookieConsentDOMElements {
  */
 export function hideCookieBanners (): void {
   const {
+    acceptOrRejectMessage,
     cookieBanner,
     cookiesAcceptedMessage,
     cookiesRejectedMessage
   } = getDomElements()
 
+  if (acceptOrRejectMessage !== null) {
+    acceptOrRejectMessage.hidden = true
+  }
   if (cookieBanner !== null) {
     cookieBanner.hidden = true
   }
